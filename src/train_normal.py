@@ -10,7 +10,9 @@ from torch.utils.data import DataLoader, Dataset, random_split
 from medmnist.dataset import OrganAMNIST
 import os
 import json
-import argparse
+from timm.models.resnet import resnet18,resnet50
+from timm.models.convnext import convnextv2_atto, convnextv2_base
+from timm.models.eva import eva02_small_patch14_224, eva02_base_patch14_224
 
 # define transforms
 transform = transforms.Compose([
@@ -30,8 +32,8 @@ train_dataset = OrganAMNIST(root='./data', split='train', transform=transform, d
 test_dataset = OrganAMNIST(root='./data', split='test', transform=transform, download=True, size=224)
 
 # define dataloader
-train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True, num_workers=4)
-test_loader = DataLoader(test_dataset, batch_size=8, shuffle=False, num_workers=4)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4)
 
 # check dataset size
 print('Train dataset size:', len(train_dataset))
@@ -42,13 +44,11 @@ for i, (img, label) in enumerate(train_loader):
     break
 
 # define model
-# model = UNet_Var(1, 1, 11)
-model = VovUnet_Var(1, 1, 11)
+model = eva02_small_patch14_224(num_classes=11, in_chans=1)
 model = model.to(device)
 
 # define loss function
 criterion_cls = nn.CrossEntropyLoss()
-criterion_seg = nn.MSELoss()
 
 # define optimizer
 optimizer = optim.Adam(model.parameters(), lr=1e-4)
@@ -64,10 +64,9 @@ def train(epoch):
         inputs, targets = inputs.to(device), targets.to(device)
         targets = targets.squeeze(1)
         optimizer.zero_grad()
-        outputs_seg, outputs_cls = model(inputs)
+        outputs_cls = model(inputs)
         loss_cls = criterion_cls(outputs_cls, targets)
-        loss_seg = criterion_seg(outputs_seg, inputs)
-        loss = loss_cls + loss_seg
+        loss = loss_cls
         loss.backward()
         optimizer.step()
         train_loss += loss.item()
@@ -89,10 +88,9 @@ def test(epoch):
         for batch_idx, (inputs, targets) in enumerate(test_loader):
             inputs, targets = inputs.to(device), targets.to(device)
             targets = targets.squeeze(1)
-            outputs_seg, outputs_cls = model(inputs)
+            outputs_cls = model(inputs)
             loss_cls = criterion_cls(outputs_cls, targets)
-            loss_seg = criterion_seg(outputs_seg, inputs)
-            loss = loss_cls + loss_seg
+            loss = loss_cls
             test_loss += loss.item()
             _, predicted = outputs_cls.max(1)
             total += targets.size(0)
