@@ -13,6 +13,7 @@ import json
 from timm.models.resnet import resnet18,resnet50
 from timm.models.convnext import convnextv2_atto, convnextv2_base
 from timm.models.eva import eva02_small_patch14_224, eva02_base_patch14_224
+from timm.models.densenet import densenet121, densenet201
 
 # define transforms
 transform = transforms.Compose([
@@ -44,7 +45,7 @@ for i, (img, label) in enumerate(train_loader):
     break
 
 # define model
-model = eva02_small_patch14_224(num_classes=11, in_chans=1)
+model = densenet201(num_classes=11, in_chans=1)
 model = model.to(device)
 
 # define loss function
@@ -52,7 +53,7 @@ criterion_cls = nn.CrossEntropyLoss()
 
 # define optimizer
 optimizer = optim.Adam(model.parameters(), lr=1e-4)
-LR_scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
+LR_scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
 
 # define training function
 def train(epoch):
@@ -97,7 +98,7 @@ def test(epoch):
             correct += predicted.eq(targets).sum().item()
             print(f"Epoch: {epoch}, Batch: {batch_idx}, Loss: {test_loss/total:.4f}, Accuracy: {100. * correct / total:.4f}",end='\r')
 
-    print(f"Epoch: {epoch}, Batch: {batch_idx}, Loss: {test_loss/total:.4f}, Accuracy: {100. * correct / total:.4f}")
+    print(f"[Test] Epoch: {epoch}, Batch: {batch_idx}, Loss: {test_loss/total:.4f}, Accuracy: {100. * correct / total:.4f}")
     return test_loss/total, 100. * correct/total
 
 # define main function
