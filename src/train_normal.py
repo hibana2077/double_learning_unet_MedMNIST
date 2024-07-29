@@ -7,7 +7,7 @@ import torch.backends.cudnn as cudnn
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, Dataset, random_split
-from medmnist.dataset import OrganAMNIST
+from medmnist.dataset import OrganAMNIST,OrganCMNIST
 import os
 import json
 from timm.models.resnet import resnet18,resnet50
@@ -29,12 +29,12 @@ if not os.path.exists('./data'):
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # define dataset
-train_dataset = OrganAMNIST(root='./data', split='train', transform=transform, download=True, size=224)
-test_dataset = OrganAMNIST(root='./data', split='test', transform=transform, download=True, size=224)
+train_dataset = OrganCMNIST(root='./data', split='train', transform=transform, download=True, size=224)
+test_dataset = OrganCMNIST(root='./data', split='test', transform=transform, download=True, size=224)
 
 # define dataloader
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4)
-test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4)
+train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4)
+test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=4)
 
 # check dataset size
 print('Train dataset size:', len(train_dataset))
