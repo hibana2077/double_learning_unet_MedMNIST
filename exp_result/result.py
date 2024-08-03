@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-TARGET_DIR = './BloodMNIST'
+TARGET_DIR = './BreastMNIST'
 
 # load all the results
 results = {}
