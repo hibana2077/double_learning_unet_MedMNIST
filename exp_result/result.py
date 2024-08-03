@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-TARGET_DIR = './OrganSMNIST'
+TARGET_DIR = './PathMNIST'
 
 # load all the results
 results = {}
@@ -34,20 +34,20 @@ df = df.sort_values(by=['max_test_acc'], ascending=False)
 print(df)
 
 # plot the results
-plt.figure(figsize=(10,8))
-# plt.bar(df.index, df['max_train_acc'], label='Train Accuracy')
+plt.figure(figsize=(15,10))  # 調整圖表大小
 plt.bar(df.index, df['max_test_acc'], label='Test Accuracy')
 plt.xlabel('Model')
 plt.ylabel('Accuracy')
 plt.title(f'Test Accuracy on {TARGET_DIR}')
 plt.legend()
-plt.xticks(rotation=45)
+plt.xticks(rotation=45)  # 將 x 軸標籤旋轉角度調整為45度
 plt.ylim(df['max_test_acc'].min()-1, df['max_test_acc'].max()+1)
 plt.grid()
+plt.tight_layout()  # 自動調整子圖參數以適應圖形區域
 plt.savefig(TARGET_DIR+'/accuracy.png')
 
 plt.figure(figsize=(12,10))
-plt.bar(df.index, df['min_train_loss'], label='Train Loss')
+# plt.bar(df.index, df['min_train_loss'], label='Train Loss')
 plt.bar(df.index, df['min_test_loss'], label='Test Loss')
 plt.xlabel('Model')
 plt.ylabel('Loss')
