@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-TARGET_DIR = './OrganAMNIST'
+TARGET_DIR = './OrganCMNIST'
 
 # load all the results
 results = {}
@@ -42,7 +42,7 @@ plt.ylabel('Accuracy')
 plt.title(f'Test Accuracy on {TARGET_DIR}')
 plt.legend()
 plt.xticks(rotation=45)
-plt.ylim(90, 100)
+plt.ylim(df['max_test_acc'].min()-1, df['max_test_acc'].max()+1)
 plt.grid()
 plt.savefig(TARGET_DIR+'/accuracy.png')
 
