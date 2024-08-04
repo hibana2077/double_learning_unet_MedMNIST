@@ -1,2 +1,3 @@
 # Abstract
 
+In this study, we propose a multi-task learning framework using a modified VoVNet-OSA Block Enhanced UNet, named VovUnet_Var, for image segmentation and classification on the Med++ MNIST dataset. VovUnet_Var features downsampling (DownOsa) and upsampling (UpOsa) blocks, with a classification head. The architecture sequentially downscales the input image to capture hierarchical features and uses adaptive average pooling and a fully connected layer for classification. For segmentation, upsampling layers restore spatial dimensions, producing segmentation masks. This model effectively handles complex medical imaging tasks, providing a robust solution for simultaneous image segmentation and classification.
