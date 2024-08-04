@@ -45,7 +45,7 @@ for i, (img, label) in enumerate(train_loader):
     break
 
 # define model
-model = eva02_small_patch14_224(num_classes=11, in_chans=1)
+model = eva02_base_patch14_224(num_classes=11, in_chans=1)
 model = model.to(device)
 
 # define loss function
