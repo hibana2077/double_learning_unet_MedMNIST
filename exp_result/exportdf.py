@@ -28,3 +28,6 @@ for dataset in dir_list:
 
 # 將 DataFrame 轉換成 JSON
 print(df)
+
+# 將 DataFrame 寫入 JSON 檔案
+df.to_json('result.json', orient='index')
