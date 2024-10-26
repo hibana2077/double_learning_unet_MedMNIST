@@ -124,6 +124,22 @@ class UNet_Var(nn.Module):
         self.up4 = (Up(128, 64, bilinear))
         self.outc = (OutConv(64, n_classes_seg))
 
+    def cal_params(self):
+        full_params = sum(p.numel() for p in self.parameters())
+        cls_machine_params = 0
+        cls_machine_layers = [
+            self.inc,
+            self.down1,
+            self.down2,
+            self.down3,
+            self.down4,
+            self.cls
+        ]
+        for layer in cls_machine_layers:
+            cls_machine_params += sum(p.numel() for p in layer.parameters())
+        
+        return full_params, cls_machine_params
+
     def forward(self, x):
         x1 = self.inc(x)
         x2 = self.down1(x1)
